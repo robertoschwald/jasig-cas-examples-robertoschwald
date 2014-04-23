@@ -55,7 +55,7 @@ This creates the JaxB classes for the sample SOAP webservice in target/src
 
 Sample application
 ------------------
-The CAS application overlay setup in cas-server-webapp of this project uses
+The CAS application maven overlay configuration in the cas-server-webapp module of this project uses
 
  * Spring-WS based WebServiceClient to authenticate against a provided test Spring-WS WebserviceEndpoint (which btw. accepts every username / password given).
    The WebserviceClient is configured to not use a WSSE header.
@@ -69,19 +69,20 @@ Configuration
  * cas-server-webapp/src/main/webapp/WEB-INF/webservice-configuration
  * cas-server-webapp/src/main/webapp/WEB-INF/web.xml
    This is the original CAS Server 3.5.3.1 web.xml file plus Spring-WS MessageDispatcherServlet config at the bottom.
-   Added for the test Spring-WS AuthenticationEndpoint.
+   Added for the test Spring-WS ExampleAuthenticationEndpoint.
  * cas-server-webapp/src/main/webapp/view/jsp/protocol/casServiceValidationSuccess.jsp (added the cas attributes to the view)
 
 
 Running the sample CAS application
 ----------------------------------
-Thanks to the work of Running the "integration-test" phase of this Maven project provides a
-quick self-contained [JASIG CAS](http://jasig.org/cas) demo environment, performing the following:
+The "integration-test" phase of this Maven project provides a quick self-contained
+[JASIG CAS](http://jasig.org/cas) demo environment, performing the following:
  * Downloads the JASIG CAS project war and overlays that with the local modifications of this project.
  * Generates an SSL cert for HTTPS access, and exports the public cert in PEM format for use by CAS clients,
  * Launch CAS on an embedded Tomcat 7 instance (ports 8080 and 8443)
  * Grants access to the 'admin' account for the Services Management interface.
- 
+Thanks to the work of Matt Forsetti. See https://github.com/forsetti/jasig-cas-quickdemo
+
 Running the application:
 ```
 git clone https://github.com/robertoschwald/jasig-cas-examples-robertoschwald.git
