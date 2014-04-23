@@ -81,6 +81,7 @@ The "integration-test" phase of this Maven project provides a quick self-contain
  * Generates an SSL cert for HTTPS access, and exports the public cert in PEM format for use by CAS clients,
  * Launch CAS on an embedded Tomcat 7 instance (ports 8080 and 8443)
  * Grants access to the 'admin' account for the Services Management interface.
+
 Thanks to the work of Matt Forsetti. See https://github.com/forsetti/jasig-cas-quickdemo
 
 Running the application:
