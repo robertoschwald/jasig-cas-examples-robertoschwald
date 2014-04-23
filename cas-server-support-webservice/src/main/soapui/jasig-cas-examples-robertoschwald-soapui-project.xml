@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="jasig-cas-examples-robertoschwald" resourceRoot="${projectDir}" soapui-version="5.0.0" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="ProjectSettings@shadowPassword"/></con:settings><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="AuthenticationSoap11" type="wsdl" bindingName="{http://roos.cas.samples.ws.org/auth}AuthenticationSoap11" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/cas/auth/authentication.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/cas/auth/authentication.wsdl"><con:part><con:url>http://localhost:8080/cas/auth/authentication.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://roos.cas.samples.ws.org/auth" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://roos.cas.samples.ws.org/auth" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://roos.cas.samples.ws.org/auth">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://roos.cas.samples.ws.org/auth" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="authRequest">
+        <xs:complexType>
+          <xs:attribute name="netid" type="xs:string" use="required"/>
+          <xs:attribute name="password" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="authResponse">
+        <xs:complexType>
+          <xs:attribute name="netid" type="xs:string" use="required"/>
+          <xs:attribute name="firstname" type="xs:string" use="optional"/>
+          <xs:attribute name="lastname" type="xs:string" use="optional"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="authRequest">
+    <wsdl:part element="tns:authRequest" name="authRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="authResponse">
+    <wsdl:part element="tns:authResponse" name="authResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Authentication">
+    <wsdl:operation name="auth">
+      <wsdl:input message="tns:authRequest" name="authRequest"></wsdl:input>
+      <wsdl:output message="tns:authResponse" name="authResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AuthenticationSoap11" type="tns:Authentication">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="auth">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="authRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="authResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AuthenticationService">
+    <wsdl:port binding="tns:AuthenticationSoap11" name="AuthenticationSoap11">
+      <soap:address location="http://localhost:8080/cas/auth/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/cas/auth/</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="auth" bindingOperationName="auth" type="Request-Response" outputName="authResponse" inputName="authRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/cas/auth/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:auth="http://roos.cas.samples.ws.org/auth">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <auth:authRequest netid="?" password="?"/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://roos.cas.samples.ws.org/auth/Authentication/authRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:requirements/><con:properties/><con:wssContainer><con:crypto><con:source>../../../../cas-server-webapp/target/security/quickdemo.jks</con:source><con:password>changeit</con:password><con:type>KEYSTORE</con:type></con:crypto><con:crypto><con:source>../../../../cas-server-webapp/target/security/quickdemo.jks</con:source><con:password>changeit</con:password><con:type>TRUSTSTORE</con:type></con:crypto></con:wssContainer><con:databaseConnectionContainer/><con:oAuth2ProfileContainer/><con:reporting><con:reportTemplates/><con:xmlTemplates/><con:parameters/></con:reporting><con:sensitiveInformation/></con:soapui-project>

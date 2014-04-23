@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <parent>
+    <groupId>org.roos.cas</groupId>
+    <artifactId>jasig-cas-examples-robertoschwald</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>cas-server-support-webservice</artifactId>
+  <name>Jasig CAS Webservice Handler Support</name>
+  <description>CAS Webservice Handler Support</description>
+
+  <build>
+    <defaultGoal>package</defaultGoal>
+    <plugins>
+      <plugin>
+        <!-- SUN xjc maven2 plugin to generate jaxb classes from xsd schema -->
+        <!--
+        <groupId>com.sun.tools.xjc.maven2</groupId>
+        <artifactId>maven-jaxb-plugin</artifactId>
+        <version>1.1</version>
+        -->
+        <!-- maven-jaxb2-plugin -->
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
+        <version>0.9.0</version>
+        <executions>
+          <execution>
+            <!-- .xsd files -->
+            <id>xsd-source-gen</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaIncludes>
+                <include>authentication.xsd</include>
+              </schemaIncludes>
+              <!-- <args>-wsdl</args> -->
+              <bindingIncludes>
+                <include>bindings.xjb</include>
+              </bindingIncludes>
+              <schemaDirectory>${pom.basedir}/src/main/resources/xsd</schemaDirectory>
+              <generateDirectory>target/src</generateDirectory>
+              <removeOldOutput>true</removeOldOutput>
+              <strict>true</strict>
+              <extension>true</extension>
+              <verbose>true</verbose>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>test</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${basedir}/target/src</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.roos.cas</groupId>
+      <artifactId>cas-server-support-directmappedattributes</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <!-- Spring-WS -->
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-ws-core</artifactId>
+      <version>${spring-ws.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-ws-core-tiger</artifactId>
+      <version>1.5.10</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-oxm</artifactId>
+      <version>1.5.10</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-oxm-tiger</artifactId>
+      <version>1.5.10</version>
+    </dependency>
+    <!-- WS Security -->
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-ws-security</artifactId>
+      <version>${spring-ws.version}</version>
+    </dependency>
+    <!-- spring-ws-security depends on Sun Java Streaming XML Parser -->
+    <dependency>
+      <groupId>com.sun.xml.stream</groupId>
+      <artifactId>sjsxp</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-security</groupId>
+      <artifactId>xmlsec</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.wss</groupId>
+      <artifactId>xws-security</artifactId>
+      <version>2.0-FCS</version>
+    </dependency>
+    <!-- JAXB -->
+    <!--
+    <dependency>
+      <groupId>javax.xml.bind</groupId>
+      <artifactId>jaxb-api</artifactId>
+      <version>2.1</version>
+    </dependency>
+    -->
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.2.7</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>jboss.repository.releases.public</id>
+      <name>JBoss Repo Public - used for com.sun.xml.wsit</name>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+    </repository>
+  </repositories>
+</project>
