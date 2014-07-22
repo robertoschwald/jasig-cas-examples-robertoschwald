@@ -24,3 +24,5 @@ target/
 
 # Overlays
 overlays/
+
+/atlassian-ide-plugin.xml
