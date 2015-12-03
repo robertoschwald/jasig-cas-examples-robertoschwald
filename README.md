@@ -1,7 +1,7 @@
 JASIG CAS EXAMPLE EXTENSIONS
 ============================
 
-Example JSIG CAS WAR Overlay project with various CAS extension modules.
+Example APEREO CAS WAR Overlay project with various CAS extension modules.
 
 Example extensions to the standard JASIG CAS SSO Server by symentis GmbH, Robert Oschwald
 
