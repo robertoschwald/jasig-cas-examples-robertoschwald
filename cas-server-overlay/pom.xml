@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The webapp overlay module -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd ">
+  <parent>
+    <groupId>com.symentis</groupId>
+    <artifactId>jasig-cas-examples-robertoschwald</artifactId>
+    <version>4.1.2</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>cas-server-overlay</artifactId>
+  <packaging>war</packaging>
+  <name>Apereo CAS-Server Webapp WAR Overlay Module</name>
+  <description>Apereo CAS-Server Webapp WAR Overlay Module</description>
+
+  <dependencies>
+    <!-- CAS Server WAR for Overlay -->
+    <dependency>
+      <groupId>org.jasig.cas</groupId>
+      <artifactId>cas-server-webapp</artifactId>
+      <type>war</type>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- CAS Dependencies -->
+    <dependency>
+      <groupId>org.jasig.cas</groupId>
+      <artifactId>cas-server-core</artifactId>
+      <type>test-jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+    </dependency>
+
+    <!-- Our extensions -->
+    <dependency>
+      <groupId>com.symentis</groupId>
+      <artifactId>cas-server-support-directmappedattributes</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.symentis</groupId>
+      <artifactId>cas-server-support-webservice</artifactId>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+
+      <!-- Generate Keystore for Jetty SSL -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>keytool-maven-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <id>clean</id>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+          <execution>
+            <phase>generate-resources</phase>
+            <id>genkey</id>
+            <goals>
+              <goal>genkey</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+          <dname>cn=localhost</dname>
+          <keypass>jettypass</keypass>
+          <storepass>jettypass</storepass>
+          <alias>jettyalias</alias>
+          <keyalg>RSA</keyalg>
+        </configuration>
+      </plugin>
+
+      <!-- Jetty Application Server demo -->
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <configuration>
+          <connectors>
+            <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+              <port>8080</port>
+              <maxIdleTime>60000</maxIdleTime>
+            </connector>
+            <connector implementation="org.eclipse.jetty.server.ssl.SslSocketConnector">
+              <port>8443</port>
+              <maxIdleTime>60000</maxIdleTime>
+              <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+              <password>jettypass</password>
+              <keyPassword>jettypass</keyPassword>
+            </connector>
+          </connectors>
+          <webApp>
+            <contextPath>/cas</contextPath>
+          </webApp>
+          <contextHandlers>
+            <!-- Add CAS-Management Webapp -->
+            <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+              <war>${basedir}/../cas-management-overlay/target/cas-management-overlay.war</war>
+              <contextPath>/cas-management</contextPath>
+            </contextHandler>
+          </contextHandlers>
+          <stopKey>stopKey</stopKey>
+          <stopPort>8009</stopPort>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

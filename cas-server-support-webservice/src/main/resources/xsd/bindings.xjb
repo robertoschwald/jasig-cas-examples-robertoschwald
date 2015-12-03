@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2014 symentis GmbH
+    Copyright 2015 symentis GmbH
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -18,21 +18,20 @@
 <!--Binding config file for the xjc compiler-->
 
 <bindings version="2.0" xmlns="http://java.sun.com/xml/ns/jaxb"
-              xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
-              xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
-              xmlns:xs="http://www.w3.org/2001/XMLSchema">
+          xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+          xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+          xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <globalBindings>
-    <!-- use Date class -->
+    <!-- use java.util.Calendar for date -->
     <javaType name="java.util.Calendar" xmlType="xs:date"
-              parseMethod="javax.xml.bind.DatatypeConverter.parseDate"
-              printMethod="javax.xml.bind.DatatypeConverter.printDate"
-        />
+                  parseMethod="javax.xml.bind.DatatypeConverter.parseDate"
+                  printMethod="javax.xml.bind.DatatypeConverter.printDate"/>
   </globalBindings>
 
   <bindings schemaLocation="authentication.xsd" node="/xs:schema">
     <jxb:schemaBindings>
-      <jxb:package name="org.roos.cas.ws.samples.auth.schema"/>
+      <jxb:package name="com.symentis.cas.ws.samples.auth.schema"/>
     </jxb:schemaBindings>
   </bindings>
 

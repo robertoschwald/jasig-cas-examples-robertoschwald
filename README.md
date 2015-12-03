@@ -1,21 +1,39 @@
 JASIG CAS EXAMPLE EXTENSIONS
 ============================
 
-Example JSIG CAS WAR Overlay project with various CAS extension modules
+Example JSIG CAS WAR Overlay project with various CAS extension modules.
 
 Example extensions to the standard JASIG CAS SSO Server by symentis GmbH, Robert Oschwald
 
-This project holds the following CAS Server extensions:
+
+CAS Overlay
+-----------
+This project is using the Apereo CAS *Maven overlay* mechanism: [http://jasig.github.io/cas/4.1.x/installation/Maven-Overlay-Installation.html](http://jasig.github.io/cas/4.1.x/installation/Maven-Overlay-Installation.html).  
+
+It's composed of two overlays:
+
+- the *cas-server-overlay* module creates the CAS server webapp war.
+- the *cas-management-overlay* module creates the CAS services management webapp war.
+
+CAS-Server Version
+------------------
+This project currently support CAS 4.1.2.
+
+For older versions, see the corresponding branches.
+
+Extensions
+----------
+This project additionally holds the following CAS Server extensions:
 
 WebserviceAuthenticationHandler
--------------------------------
+-----------------------------
 Module cas-server-support-webservice is a sample WebserviceAuthenticationHandler implementation you can use to authenticate
 against a Webservice based backend. The WebserviceAuthenticationHandler is webservice technology agnostic.
 Simply wire in your WebserviceClient implementation (e.g. SOAP or REST client).
 Provided is a Spring-WS based Webservice client which can be configured to run with- or without a WSSE header.
 
 DirectMappedPersonAttributeDao
-------------------------------
+----------------------------
 By default, the PersonAttributeDao implementations of the Jasig Person-Directory library need an extra request
 after sucessful authentication to pull user attributes to provide them to CAS Client applications.
 The DirectMappedPersonAttributeDao is a short-term caching attributeRepository, which can be filled with user attributes
@@ -51,7 +69,7 @@ Instead, select the attributes you want to have returned to services on a per-se
 Project setup
 -------------
 After you checked out the code from the repository, it is mandatory that you perform a mvn install run.
-This creates the JaxB classes for the sample SOAP webservice in target/src
+This creates the JaxB classes for the sample SOAP webservice in target/src.
 
 Sample application
 ------------------
@@ -63,60 +81,43 @@ The CAS application maven overlay configuration in the cas-server-webapp module 
 
 Configuration
 -------------
- * cas-server-webapp/src/main/webapp/WEB-INF/deployerConfigContext.xml
- * cas-server-webapp/src/main/webapp/WEB-INF/spring-ws-config.xml
- * cas-server-webapp/src/main/webapp/WEB-INF/spring-configuration
- * cas-server-webapp/src/main/webapp/WEB-INF/webservice-configuration
+ * cas-server-overlay/src/main/webapp/WEB-INF/deployerConfigContext.xml
+ * cas-server-overlay/src/main/webapp/WEB-INF/spring-ws-config.xml
+ * cas-server-overlay/src/main/webapp/WEB-INF/spring-configuration
+ * cas-server-overlay/src/main/webapp/WEB-INF/webservice-configuration
  * cas-server-webapp/src/main/webapp/WEB-INF/web.xml
-   This is the original CAS Server 3.5.3.1 web.xml file plus Spring-WS MessageDispatcherServlet config at the bottom.
-   Added for the test Spring-WS ExampleAuthenticationEndpoint.
- * cas-server-webapp/src/main/webapp/view/jsp/protocol/casServiceValidationSuccess.jsp (added the cas attributes to the view)
+   This is the original CAS Server 4.1.2 web.xml file plus Spring-WS MessageDispatcherServlet config at the bottom, added for the test Spring-WS ExampleAuthenticationEndpoint.
+ * cas-server-webapp/src/main/webapp/view/jsp/protocol/casServiceValidationSuccess.jsp (adds the cas attributes to the CAS 2.0 service response as a custom extension (normally, attributes are only supported in the /p3/casServiceValidate). 
 
 
 Running the sample CAS application
 ----------------------------------
-The "integration-test" phase of this Maven project provides a quick self-contained
-[JASIG CAS](http://jasig.org/cas) demo environment, performing the following:
- * Downloads the JASIG CAS project war and overlays that with the local modifications of this project.
- * Generates an SSL cert for HTTPS access, and exports the public cert in PEM format for use by CAS clients,
- * Launch CAS on an embedded Tomcat 7 instance (ports 8080 and 8443)
- * Grants access to the 'admin' account for the Services Management interface.
+The project contains the "jetty" maven plugin which provides a quick self-contained
+[JASIG CAS](http://jasig.org/cas) demo server environment, performing the following:
+ * Downloads the JASIG CAS and CAS-Management project war files and overlays them with the corresponding local modifications of this project.
+ * Launch CAS and CAS-Management webapps on an embedded Jetty instance (ports 8080 and 8443)
+ * Grants access to the 'testadmin' account for the Services Management interface. (see 
 
-Thanks to the work of Matt Forsetti. See https://github.com/forsetti/jasig-cas-quickdemo
+Thanks to the work of Jerome Leleu. See https://github.com/forsetti/jasig-cas-quickdemo
 
 Running the application:
+
 ```
-git clone https://github.com/robertoschwald/jasig-cas-examples-robertoschwald.git
-cd jasig-cas-examples-robertoschwald
-mvn integration-test
+ cd cas-server-overlay
+ mvn jetty:run
 ```
 
 Then access https://localhost:8443/cas/ in your favorite browser.
-The Services Management interface can be accessed at
- https://localhost:8443/cas/services/manage.html (log in as admin:anypass)
+
+The Services Management webapp can be accessed at
+
+ http://localhost:8080/cas-management. (log in as testadmin:<anypassword>)
 
 Warning
 -------
 *DO NOT USE THIS PROJECT AS PART OF ANY PRODUCTION BUILD*.
 Instead, use a separate Java application server (Tomcat, JBoss, etc), properly secured,
 and build a securely configured CAS server bundle to be deployed into that app server.
-
-
-Defaults
---------
-The following defaults can be overidden using Maven's standard property
-override.  For example, to run HTTPS on TCP PORT 9443, add
-"-Dhttps.port=9443" to the command line.
-
-```
-cas.version=3.5.2
-http.port=8080
-https.port=8443
-keystore.file=quickdemo.jks
-keystore.pem=quickdemo.pem
-keystore.pass=quickdemo
-keystore.dir=target/security
-```
 
 Keystore files
 --------------

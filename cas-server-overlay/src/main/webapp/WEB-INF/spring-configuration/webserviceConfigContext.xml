@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+  <description>
+    This is the symentis SOAP Webservice Authenticator Client context configuration.
+  </description>
+
+  <util:list id="packagesToScan">
+    <value>de.goethe.cas.adaptors.ws.kdf</value>
+  </util:list>
+
+  <!-- **************************************-->
+  <!-- Webservice Client -->
+  <!-- **************************************-->
+  <bean id="authWebserviceClient" class="com.symentis.cas.ws.sample.client.ExampleWsClient"
+        p:marshaller-ref="webserviceMarshaller"
+        p:unmarshaller-ref="webserviceMarshaller"
+        p:defaultUri="https://localhost:8443/cas/auth/authentication.wsdl"
+        p:configFilePath="/WEB-INF/webservice-configuration/webserviceSecurityPolicy.xml"/>
+
+  <!-- (Un-)Marshaller -->
+  <bean id="webserviceMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+    <property name="contextPath" value="com.symentis.cas.ws.samples.auth.schema"/>
+  </bean>
+
+</beans>

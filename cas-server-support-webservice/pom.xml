@@ -4,14 +4,101 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <parent>
-    <groupId>org.roos.cas</groupId>
+    <groupId>com.symentis</groupId>
     <artifactId>jasig-cas-examples-robertoschwald</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>4.1.2</version>
   </parent>
+
   <modelVersion>4.0.0</modelVersion>
   <artifactId>cas-server-support-webservice</artifactId>
-  <name>Jasig CAS Webservice Handler Support</name>
-  <description>CAS Webservice Handler Support</description>
+  <name>symentis CAS Webservice Handler Support</name>
+  <description>symentis CAS Webservice Handler Support</description>
+
+  <repositories>
+    <repository>
+      <id>jboss.repository.releases.public</id>
+      <name>JBoss Repo Public - used for com.sun.xml.wsit</name>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+
+    <!-- Dependencies for compilation -->
+    <dependency>
+      <groupId>org.jasig.cas</groupId>
+      <artifactId>cas-server-core</artifactId>
+      <type>jar</type>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.symentis</groupId>
+      <artifactId>cas-server-support-directmappedattributes</artifactId>
+    </dependency>
+
+    <!-- Spring-WS -->
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-ws-core</artifactId>
+      <version>${spring-ws.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-ws-core-tiger</artifactId>
+      <version>1.5.10</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-oxm</artifactId>
+      <version>1.5.10</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-oxm-tiger</artifactId>
+      <version>1.5.10</version>
+    </dependency>
+
+    <!-- WS Security -->
+    <dependency>
+      <groupId>org.springframework.ws</groupId>
+      <artifactId>spring-ws-security</artifactId>
+      <version>${spring-ws.version}</version>
+    </dependency>
+    <!-- spring-ws-security depends on Sun Java Streaming XML Parser -->
+    <dependency>
+      <groupId>com.sun.xml.stream</groupId>
+      <artifactId>sjsxp</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-security</groupId>
+      <artifactId>xmlsec</artifactId>
+      <version>2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.xml.wss</groupId>
+      <artifactId>xws-security</artifactId>
+      <version>2.0-FCS</version>
+    </dependency>
+    <!-- JAXB -->
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.2.7</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+  </dependencies>
+
 
   <build>
     <defaultGoal>package</defaultGoal>
@@ -74,77 +161,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.roos.cas</groupId>
-      <artifactId>cas-server-support-directmappedattributes</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <!-- Spring-WS -->
-    <dependency>
-      <groupId>org.springframework.ws</groupId>
-      <artifactId>spring-ws-core</artifactId>
-      <version>${spring-ws.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.ws</groupId>
-      <artifactId>spring-ws-core-tiger</artifactId>
-      <version>1.5.10</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.ws</groupId>
-      <artifactId>spring-oxm</artifactId>
-      <version>1.5.10</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.ws</groupId>
-      <artifactId>spring-oxm-tiger</artifactId>
-      <version>1.5.10</version>
-    </dependency>
-    <!-- WS Security -->
-    <dependency>
-      <groupId>org.springframework.ws</groupId>
-      <artifactId>spring-ws-security</artifactId>
-      <version>${spring-ws.version}</version>
-    </dependency>
-    <!-- spring-ws-security depends on Sun Java Streaming XML Parser -->
-    <dependency>
-      <groupId>com.sun.xml.stream</groupId>
-      <artifactId>sjsxp</artifactId>
-      <version>1.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>xml-security</groupId>
-      <artifactId>xmlsec</artifactId>
-      <version>2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.wss</groupId>
-      <artifactId>xws-security</artifactId>
-      <version>2.0-FCS</version>
-    </dependency>
-    <!-- JAXB -->
-    <!--
-    <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-      <version>2.1</version>
-    </dependency>
-    -->
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-impl</artifactId>
-      <version>2.2.7</version>
-      <scope>runtime</scope>
-    </dependency>
-  </dependencies>
-
-  <repositories>
-    <repository>
-      <id>jboss.repository.releases.public</id>
-      <name>JBoss Repo Public - used for com.sun.xml.wsit</name>
-      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
-    </repository>
-  </repositories>
 </project>
