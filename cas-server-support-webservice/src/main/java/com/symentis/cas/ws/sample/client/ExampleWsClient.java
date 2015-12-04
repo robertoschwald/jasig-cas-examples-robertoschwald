@@ -119,13 +119,14 @@ public class ExampleWsClient extends WebserviceClientBase implements WebserviceC
       log.error("Error:", e);
       return null;
     }
-    log.debug("SOAP Response: " + response);
+    log.debug("SOAP Response: " + response.getFirstname() + "," + response.getLastname() + "," + response.getNetid());
     if (response == null) return null;
     if (StringUtils.isNotBlank(response.getNetid())) {
       Map<String, Object> attributes = new HashMap<String, Object>();
       attributes.put("firstname", response.getFirstname());
       attributes.put("lastname", response.getLastname());
       attributes.put("netid", response.getNetid());
+      log.debug("Attributes: " + attributes);
       return new DefaultPrincipalFactory().createPrincipal(this._username, attributes);
     }
     return null;

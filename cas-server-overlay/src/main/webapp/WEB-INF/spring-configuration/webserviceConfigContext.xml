@@ -18,12 +18,15 @@
   </util:list>
 
   <!-- **************************************-->
-  <!-- Webservice Client -->
+  <!-- SOAP Webservice  Client -->
+  <!-- WARNING! NORMALLY, YOU SHOULD USE SSL defaultUri!!
+       We just don't use it due to keystore cert validation problems with jetty-maven-plugin and httpClient with SSL in this demo project -->
   <!-- **************************************-->
+
   <bean id="authWebserviceClient" class="com.symentis.cas.ws.sample.client.ExampleWsClient"
         p:marshaller-ref="webserviceMarshaller"
         p:unmarshaller-ref="webserviceMarshaller"
-        p:defaultUri="https://localhost:8443/cas/auth/authentication.wsdl"
+        p:defaultUri="http://localhost:8080/cas/auth/authentication.wsdl"
         p:configFilePath="/WEB-INF/webservice-configuration/webserviceSecurityPolicy.xml"/>
 
   <!-- (Un-)Marshaller -->

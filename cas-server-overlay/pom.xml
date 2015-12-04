@@ -60,15 +60,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>keytool-maven-plugin</artifactId>
-        <version>1.3</version>
         <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <id>clean</id>
-            <goals>
-              <goal>clean</goal>
-            </goals>
-          </execution>
           <execution>
             <phase>generate-resources</phase>
             <id>generateKeyPair</id>
@@ -78,7 +70,7 @@
           </execution>
         </executions>
         <configuration>
-          <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+          <keystore>${basedir}/etc/jetty-ssl.keystore</keystore>
           <dname>cn=localhost</dname>
           <keypass>jettypass</keypass>
           <storepass>jettypass</storepass>
@@ -101,7 +93,8 @@
             <connector implementation="org.eclipse.jetty.server.ssl.SslSocketConnector">
               <port>8443</port>
               <maxIdleTime>60000</maxIdleTime>
-              <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+              <truststore>${basedir}/etc/jetty-ssl.keystore</truststore>
+              <keystore>${basedir}/etc/jetty-ssl.keystore</keystore>
               <password>jettypass</password>
               <keyPassword>jettypass</keyPassword>
             </connector>
