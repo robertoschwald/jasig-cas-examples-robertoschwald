@@ -37,8 +37,10 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.xml.wss.XWSSProcessor;
 import com.sun.xml.wss.XWSSProcessorFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.core.io.Resource;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.context.support.ServletContextResource;
 
 import javax.servlet.ServletContext;
@@ -58,7 +60,7 @@ import java.util.Map;
  * @author Robert Oschwald
  */
 @Configurable
-public class ExampleWsClient extends WebserviceClientBase implements WebserviceClient {
+public class ExampleWsClient extends WebserviceClientBase implements WebserviceClient, ServletContextAware {
   private static final Logger log = LoggerFactory.getLogger(ExampleWsClient.class);
   private ServletContext servletContext;
   private Resource _sConfigResource;
