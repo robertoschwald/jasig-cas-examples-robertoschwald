@@ -14,7 +14,7 @@
   </description>
 
   <util:list id="packagesToScan">
-    <value>de.goethe.cas.adaptors.ws.kdf</value>
+    <value>com.symentis.cas.ws.sample.client</value>
   </util:list>
 
   <!-- **************************************-->
