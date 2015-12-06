@@ -45,6 +45,10 @@
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
+  <!-- Sample which uses JPAServiceRegistryDao and shared TransactionManager with ticketRegistry. See ticketRegistry.xml -->
+  <!--<tx:annotation-driven />-->
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
   <!--
     | This bean declares our AuthenticationManager.  The CentralAuthenticationService service bean
     | declared in applicationContext.xml picks up this AuthenticationManager by reference to its id,
@@ -87,10 +91,6 @@
     </property>
   </bean>
 
-  <!-- Required for proxy ticket mechanism. -->
-  <bean id="proxyAuthenticationHandler" class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"
-        p:httpClient-ref="supportsTrustStoreSslSocketFactoryHttpClient"/>
-
   <!--
       | DEMO Webservice Authentication Handler with injected SOAP authWebservice Client and attributeRespository.
       | Replace with your AuthenticationHandler if you do not want to use the Webservice Auth Handler in your demo.
@@ -105,6 +105,10 @@
     <property name="webserviceClient" ref="authWebserviceClient"/>
     <property name="attributeRepository" ref="attributeRepository"/>
   </bean>
+
+  <!-- Required for proxy ticket mechanism. -->
+  <bean id="proxyAuthenticationHandler" class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"
+        p:httpClient-ref="supportsTrustStoreSslSocketFactoryHttpClient"/>
 
   <!-- Required for proxy ticket mechanism -->
   <bean id="proxyPrincipalResolver"
@@ -142,8 +146,11 @@
   would probably want to replace this with the JPA-backed ServiceRegistry DAO
   The name of this bean should remain "serviceRegistryDao".
    -->
-  <bean id="serviceRegistryDao" class="org.jasig.cas.services.JsonServiceRegistryDao"
-        c:configDirectory="${service.registry.config.location:classpath:services}"/>
+  <!--<bean id="serviceRegistryDao" class="org.jasig.cas.services.JsonServiceRegistryDao"-->
+        <!--c:configDirectory="${service.registry.config.location:classpath:services}"/>-->
+
+  <!-- JPA -->
+  <bean id="serviceRegistryDao" class="org.jasig.cas.services.JpaServiceRegistryDaoImpl"/>
 
   <bean id="auditTrailManager" class="org.jasig.inspektr.audit.support.Slf4jLoggingAuditTrailManager"/>
 
