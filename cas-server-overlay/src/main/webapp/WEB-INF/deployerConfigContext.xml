@@ -149,7 +149,12 @@
   <!--<bean id="serviceRegistryDao" class="org.jasig.cas.services.JsonServiceRegistryDao"-->
         <!--c:configDirectory="${service.registry.config.location:classpath:services}"/>-->
 
-  <!-- JPA -->
+  <!-- JPA Service Registry -->
+  <!-- Note: For the JPA ServiceRegistry configuration as described in
+             http://jasig.github.io/cas/4.1.x/installation/Service-Management.html#registered-services
+             (packagesToScan, jpaVendorAdapter, entityManagerFactory, transactionManager, txAdvice and aop poincut config)
+             see ticketRegistry.xml
+  -->
   <bean id="serviceRegistryDao" class="org.jasig.cas.services.JpaServiceRegistryDaoImpl"/>
 
   <bean id="auditTrailManager" class="org.jasig.inspektr.audit.support.Slf4jLoggingAuditTrailManager"/>
