@@ -119,11 +119,13 @@
     <aop:pointcut id="ticketRegistryLockingOperations" expression="execution(* org.jasig.cas.ticket.registry.support.JpaLockingStrategy.*(..))"/>
     <!-- Added next line for JPA Service Registry as we share same transactionManager -->
     <aop:pointcut id="serviceRegistryOperations" expression="execution(* org.jasig.cas.services.JpaServiceRegistryDaoImpl.*(..))"/>
+    <aop:pointcut id="registeredServiceOperations" expression="execution(* org.jasig.cas.services.RegisteredServiceImpl.*(..))"/>
 
     <aop:advisor advice-ref="txAdvice" pointcut-ref="ticketRegistryOperations"/>
     <aop:advisor advice-ref="txAdvice" pointcut-ref="ticketRegistryLockingOperations"/>
     <!-- Added next line for JPA Service Registry as we share same transactionManager -->
     <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceRegistryOperations"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="registeredServiceOperations"/>
   </aop:config>
 
   <tx:annotation-driven transaction-manager="transactionManager"/>

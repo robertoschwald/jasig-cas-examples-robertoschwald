@@ -9,7 +9,7 @@ Example extensions to the standard JASIG CAS SSO Server by symentis GmbH, Robert
 
 CAS-Server Version
 ------------------
-This project currently supports **CAS 4.1.2**.
+This project currently supports **CAS 4.1.3-SNAPSHOT**.
 
 For older versions, see the corresponding branches.
 
@@ -104,9 +104,8 @@ Configuration
  * cas-server-overlay/src/main/webapp/WEB-INF/spring-configuration
  * cas-server-overlay/src/main/webapp/WEB-INF/webservice-configuration
  * cas-server-overlay/src/main/webapp/WEB-INF/web.xml
-   This is the original CAS Server 4.1.2 web.xml file plus Spring-WS MessageDispatcherServlet config at the bottom, added for the test Spring-WS ExampleAuthenticationEndpoint.
+   This is the original CAS Server 4.1.3-SNAPSHOT web.xml file plus Spring-WS MessageDispatcherServlet config at the bottom, added for the test Spring-WS ExampleAuthenticationEndpoint.
  * cas-server-overlay/src/main/webapp/view/jsp/protocol/casServiceValidationSuccess.jsp (adds the cas attributes to the CAS 2.0 service response as a custom extension (by default, attributes are only supported at the CAS 3.0 Spec default URI /p3/serviceValidate).
- 
  * cas-management-overlay/src/main/resources/user-details.properties (configure usernames allowed to access the management webapp)
 
 
