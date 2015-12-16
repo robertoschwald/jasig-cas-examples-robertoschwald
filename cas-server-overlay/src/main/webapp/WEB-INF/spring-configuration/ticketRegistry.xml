@@ -43,6 +43,7 @@
   <!-- we must set the validationQuery to survive db restarts and the 8hrs idle drop timeout -->
   <!-- use this queries for your db version:
     Database        Validation Query
+    HSQLDB          "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"
     MySQL           "Select 1"
     MS SQL Server   "Select 1"
     Oracle          "select 'validationQuery' from dual"
@@ -51,7 +52,7 @@
     id="dataSource"
     class="com.mchange.v2.c3p0.ComboPooledDataSource"
     p:driverClass="${database.driverClass:org.hsqldb.jdbcDriver}"
-    p:jdbcUrl="jdbc:hsqldb:hsql://localhost/"
+    p:jdbcUrl="jdbc:hsqldb:jdbc:hsqldb:mem:cas-ticket-registry"
     p:user="${database.user:sa}"
     p:password="${database.password:}"
     p:initialPoolSize="${database.pool.minSize:6}"
@@ -92,7 +93,7 @@
     <property name="jpaProperties">
       <props>
         <prop key="hibernate.dialect">${database.hibernate.dialect:org.hibernate.dialect.HSQLDialect}</prop>
-        <prop key="hibernate.hbm2ddl.auto">create-drop</prop> <!-- use "update" if you use remember-me long-term tickets -->
+        <prop key="hibernate.hbm2ddl.auto">update</prop> <!-- use "update" if you use remember-me long-term tickets or HSQLDB. "create-drop" does not work with HSQLDB -->
         <prop key="hibernate.jdbc.batch_size">${database.hibernate.batchSize:1}</prop>
       </props>
     </property>
