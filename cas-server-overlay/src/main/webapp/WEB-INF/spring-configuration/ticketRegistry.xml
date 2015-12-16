@@ -42,16 +42,16 @@
   <!-- dataSource -->
   <!-- we must set the validationQuery to survive db restarts and the 8hrs idle drop timeout -->
   <!-- use this queries for your db version:
-    Database      	Validation Query
-    MySQL   				"Select 1"
+    Database        Validation Query
+    MySQL           "Select 1"
     MS SQL Server   "Select 1"
-    Oracle  				"select 'validationQuery' from dual"
+    Oracle          "select 'validationQuery' from dual"
   -->
   <bean
     id="dataSource"
     class="com.mchange.v2.c3p0.ComboPooledDataSource"
     p:driverClass="${database.driverClass:org.hsqldb.jdbcDriver}"
-    p:jdbcUrl="${database.url:jdbc:hsqldb:mem:cas-ticket-registry}"
+    p:jdbcUrl="jdbc:hsqldb:hsql://localhost/"
     p:user="${database.user:sa}"
     p:password="${database.password:}"
     p:initialPoolSize="${database.pool.minSize:6}"
@@ -63,7 +63,7 @@
     p:acquireRetryAttempts="${database.pool.acquireRetryAttempts:5}"
     p:acquireRetryDelay="${database.pool.acquireRetryDelay:2000}"
     p:idleConnectionTestPeriod="${database.pool.idleConnectionTestPeriod:30}"
-    p:preferredTestQuery="${database.pool.connectionHealthQuery:select 1}"
+    p:preferredTestQuery="${database.pool.connectionHealthQuery:SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS}"
   />
 
   <!--<bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.DefaultTicketRegistry"/>-->

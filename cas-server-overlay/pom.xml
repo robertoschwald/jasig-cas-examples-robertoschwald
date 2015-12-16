@@ -37,14 +37,7 @@
     </dependency>
 
     <!-- symentis extensions -->
-    <dependency>
-      <groupId>com.symentis</groupId>
-      <artifactId>cas-server-support-directmappedattributes</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.symentis</groupId>
-      <artifactId>cas-server-support-webservice</artifactId>
-    </dependency>
+
 
 
     <!-- JPA Service- / Ticket Registry dependencies -->
@@ -77,30 +70,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-
-      <!-- Generate Keystore for Jetty SSL -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>keytool-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <id>generateKeyPair</id>
-            <goals>
-              <goal>generateKeyPair</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <keystore>${basedir}/etc/jetty-ssl.keystore</keystore>
-          <dname>cn=localhost</dname>
-          <keypass>jettypass</keypass>
-          <storepass>jettypass</storepass>
-          <alias>jettyalias</alias>
-          <keyalg>RSA</keyalg>
-          <skipIfExist>true</skipIfExist>
-        </configuration>
       </plugin>
 
       <!-- Jetty Application Server demo -->

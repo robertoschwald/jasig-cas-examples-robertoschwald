@@ -45,10 +45,6 @@
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-  <!-- Sample which uses JPAServiceRegistryDao and shared TransactionManager with ticketRegistry. See ticketRegistry.xml -->
-  <!--<tx:annotation-driven />-->
-  <tx:annotation-driven transaction-manager="transactionManager"/>
-
   <!--
     | This bean declares our AuthenticationManager.  The CentralAuthenticationService service bean
     | declared in applicationContext.xml picks up this AuthenticationManager by reference to its id,
@@ -57,6 +53,9 @@
     | AuthenticationManager here in the userConfigContext.xml so that you can see the things you will
     | need to change in context.
     +-->
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    
   <bean id="authenticationManager" class="org.jasig.cas.authentication.PolicyBasedAuthenticationManager">
     <constructor-arg>
       <map>
@@ -67,8 +66,8 @@
            | set its name to something other than its default name (typically the simple class name).
            -->
         <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver"/>
-        <!--<entry key-ref="primaryAuthenticationHandler" value-ref="primaryPrincipalResolver" />-->
-        <entry key-ref="webserviceAuthenticationHandler" value-ref="primaryPrincipalResolver"/>
+        <entry key-ref="primaryAuthenticationHandler" value-ref="primaryPrincipalResolver" />
+
       </map>
     </constructor-arg>
     <!-- Uncomment the metadata populator to capture the password.
@@ -91,6 +90,15 @@
     </property>
   </bean>
 
+  <bean id="primaryAuthenticationHandler"
+          class="org.jasig.cas.authentication.AcceptUsersAuthenticationHandler">
+        <property name="users">
+            <map>
+                <entry key="casuser" value="Mellon"/>
+            </map>
+        </property>
+    </bean>
+
   <!--
       | DEMO Webservice Authentication Handler with injected SOAP authWebservice Client and attributeRespository.
       | Replace with your AuthenticationHandler if you do not want to use the Webservice Auth Handler in your demo.
@@ -101,10 +109,7 @@
       | * org.jasig.cas.adaptors.x509.authentication.handler.support.X509CredentialsAuthenticationHandler
       | * org.jasig.cas.support.spnego.authentication.handler.support.JCIFSSpnegoAuthenticationHandler
       -->
-  <bean id="webserviceAuthenticationHandler" class="com.symentis.cas.authentication.handler.WebserviceAuthenticationHandler">
-    <property name="webserviceClient" ref="authWebserviceClient"/>
-    <property name="attributeRepository" ref="attributeRepository"/>
-  </bean>
+
 
   <!-- Required for proxy ticket mechanism. -->
   <bean id="proxyAuthenticationHandler" class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"
@@ -127,18 +132,22 @@
     Bean that defines the attributes that a service may return.  This example uses the DirectMappedPersonAttributeDao.
     The id should remain "attributeRepository" though.
     +-->
-  <bean id="attributeRepository" class="com.symentis.cas.services.persondir.support.DirectMappedPersonAttributeDao">
-    <property name="possibleUserAttributeNames">
-      <description>defines the user attributes that the service may return</description>
-      <set>
-        <value>firstname</value>
-        <value>lastname</value>
-        <value>somethingelse</value>
-      </set>
-    </property>
-    <!-- optional. Default is 1 minute -->
-    <!-- <property name="TTL" value="5"/> -->
-  </bean>
+  <bean id="attributeRepository" class="org.jasig.services.persondir.support.NamedStubPersonAttributeDao"
+          p:backingMap-ref="attrRepoBackingMap" />
+
+    <util:map id="attrRepoBackingMap">
+        <entry key="uid" value="uid" />
+        <entry key="eduPersonAffiliation" value="eduPersonAffiliation" />
+        <entry key="groupMembership" value="groupMembership" />
+        <entry>
+            <key><value>memberOf</value></key>
+            <list>
+                <value>faculty</value>
+                <value>staff</value>
+                <value>org</value>
+            </list>
+        </entry>
+    </util:map>
 
 
   <!--
