@@ -13,9 +13,9 @@
     This is the symentis SOAP Webservice Authenticator Client context configuration.
   </description>
 
-  <util:list id="packagesToScan">
-    <value>com.symentis.cas.ws.sample.client</value>
-  </util:list>
+  <!--<util:list id="packagesToScan">-->
+    <!--<value>com.symentis.cas.ws.sample.client</value>-->
+  <!--</util:list>-->
 
   <!-- **************************************-->
   <!-- SOAP Webservice  Client -->

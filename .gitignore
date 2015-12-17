@@ -26,3 +26,4 @@ target/
 overlays/
 
 /atlassian-ide-plugin.xml
+*.log

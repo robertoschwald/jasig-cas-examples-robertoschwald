@@ -46,7 +46,6 @@
       <artifactId>cas-server-support-webservice</artifactId>
     </dependency>
 
-
     <!-- JPA Service- / Ticket Registry dependencies -->
     <dependency>
       <groupId>org.jasig.cas</groupId>
@@ -79,7 +78,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
 
-      <!-- Generate Keystore for Jetty SSL -->
+      <!-- Generate Keystore for Jetty SSL (if not yet existing) -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>keytool-maven-plugin</artifactId>
@@ -102,6 +101,7 @@
           <skipIfExist>true</skipIfExist>
         </configuration>
       </plugin>
+
 
       <!-- Jetty Application Server demo -->
       <plugin>

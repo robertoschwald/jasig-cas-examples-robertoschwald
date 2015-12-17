@@ -59,7 +59,6 @@ import java.util.Map;
  *
  * @author Robert Oschwald
  */
-@Configurable
 public class ExampleWsClient extends WebserviceClientBase implements WebserviceClient, ServletContextAware {
   private static final Logger log = LoggerFactory.getLogger(ExampleWsClient.class);
   private ServletContext servletContext;
@@ -70,7 +69,6 @@ public class ExampleWsClient extends WebserviceClientBase implements WebserviceC
   private String _username;
   private String _password;
   private boolean _useWSSE;
-  @NotNull
   private String configFilePath;
 
   /**
