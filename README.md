@@ -1,10 +1,17 @@
 JASIG CAS EXAMPLE EXTENSIONS
 ============================
 
-Example APEREO CAS WAR Overlay project with various CAS extension modules.
+Example APEREO CAS WAR Overlay project with various CAS extension modules 
 
-Example extensions to the standard JASIG CAS SSO Server by symentis GmbH, Robert Oschwald
+**Using JPA for Ticket- and Service Registry (HSQLDB)**
 
+Example extensions to the standard JASIG CAS SSO Server by symentis GmbH, Robert Oschwald.
+
+CAS-Server Version
+------------------
+This project currently supports **CAS 4.1.3-SNAPSHOT**.
+
+For older versions, see the corresponding branches.
 
 CAS Overlay
 -----------
@@ -15,11 +22,13 @@ It's composed of two war overlays:
 - the *cas-server-overlay* module creates the CAS server webapp war.
 - the *cas-management-overlay* module creates the CAS services management webapp war.
 
-CAS-Server Version
-------------------
-This project currently supports CAS 4.1.2.
+JPA Configuration
+-----------------
+This demo application uses JPA for the Service- and Ticket Registries.
 
-For older versions, see the corresponding branches.
+Service-Registry config is done in cas-server-overlay and in cas-management-overlay, as both share the same db tables for service registry entries.
+
+This example uses HSQLDB. Real implementations use MySQL, PostgreSQL, Oracle, MSSQL or any other Hibernate supported database backend.
 
 Extensions
 ----------
@@ -95,9 +104,8 @@ Configuration
  * cas-server-overlay/src/main/webapp/WEB-INF/spring-configuration
  * cas-server-overlay/src/main/webapp/WEB-INF/webservice-configuration
  * cas-server-overlay/src/main/webapp/WEB-INF/web.xml
-   This is the original CAS Server 4.1.2 web.xml file plus Spring-WS MessageDispatcherServlet config at the bottom, added for the test Spring-WS ExampleAuthenticationEndpoint.
- * cas-server-overlay/src/main/webapp/view/jsp/protocol/casServiceValidationSuccess.jsp (adds the cas attributes to the CAS 2.0 service response as a custom extension (normally, attributes are only supported in the /p3/casServiceValidate).
- 
+   This is the original CAS Server 4.1.3-SNAPSHOT web.xml file plus Spring-WS MessageDispatcherServlet config at the bottom, added for the test Spring-WS ExampleAuthenticationEndpoint.
+ * cas-server-overlay/src/main/webapp/view/jsp/protocol/casServiceValidationSuccess.jsp (adds the cas attributes to the CAS 2.0 service response as a custom extension (by default, attributes are only supported at the CAS 3.0 Spec default URI /p3/serviceValidate).
  * cas-management-overlay/src/main/resources/user-details.properties (configure usernames allowed to access the management webapp)
 
 

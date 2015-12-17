@@ -22,55 +22,161 @@
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-    <description>
-        Configuration for the default TicketRegistry which stores the tickets in-memory and cleans them out as specified
-        intervals.
-    </description>
+       xsi:schemaLocation="
+              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+              http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+              http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+  <description>
+    Configuration for the Jpa TicketRegistry which stores the tickets in a database and cleans them out at specified intervals.
+    See http://jasig.github.io/cas/4.1.x/installation/JPA-Ticket-Registry.html
+  </description>
 
-    <!-- Ticket Registry -->
-    <bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.DefaultTicketRegistry"/>
+  <!-- JPA Ticket Registry -->
+  <!-- See http://jasig.github.io/cas/4.1.x/installation/JPA-Ticket-Registry.html -->
 
-    <!--Quartz -->
-    <!-- TICKET REGISTRY CLEANER -->
-    <bean id="ticketRegistryCleaner" class="org.jasig.cas.ticket.registry.support.DefaultTicketRegistryCleaner"
-          c:centralAuthenticationService-ref="centralAuthenticationService"
-          c:ticketRegistry-ref="ticketRegistry"/>
+  <!-- dataSource -->
+  <!-- we must set the validationQuery to survive db restarts and the 8hrs idle drop timeout -->
+  <!-- use this queries for your db version:
+    Database        Validation Query
+    HSQLDB          "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"
+    MySQL           "Select 1"
+    MS SQL Server   "Select 1"
+    Oracle          "select 'validationQuery' from dual"
+  -->
+  <bean
+    id="dataSource"
+    class="com.mchange.v2.c3p0.ComboPooledDataSource"
+    p:driverClass="${database.driverClass:org.hsqldb.jdbcDriver}"
+    p:jdbcUrl="${database.url:jdbc:hsqldb:mem:cas-ticket-registry}"
+    p:user="${database.user:sa}"
+    p:password="${database.password:}"
+    p:initialPoolSize="${database.pool.minSize:6}"
+    p:minPoolSize="${database.pool.minSize:6}"
+    p:maxPoolSize="${database.pool.maxSize:18}"
+    p:maxIdleTimeExcessConnections="${database.pool.maxIdleTime:1000}"
+    p:checkoutTimeout="${database.pool.maxWait:2000}"
+    p:acquireIncrement="${database.pool.acquireIncrement:16}"
+    p:acquireRetryAttempts="${database.pool.acquireRetryAttempts:5}"
+    p:acquireRetryDelay="${database.pool.acquireRetryDelay:2000}"
+    p:idleConnectionTestPeriod="${database.pool.idleConnectionTestPeriod:30}"
+    p:preferredTestQuery="${database.pool.connectionHealthQuery:SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS}"
+  />
 
-    <bean id="jobDetailTicketRegistryCleaner"
-          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
-          p:targetObject-ref="ticketRegistryCleaner"
-          p:targetMethod="clean"/>
+  <!--<bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.DefaultTicketRegistry"/>-->
+  <bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.JpaTicketRegistry"/>
 
-    <bean id="triggerJobDetailTicketRegistryCleaner"
-          class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
-          p:jobDetail-ref="jobDetailTicketRegistryCleaner"
-          p:startDelay="20000"
-          p:repeatInterval="5000000"/>
+  <!-- Injects EntityManager/Factory instances into beans with @PersistenceUnit and @PersistenceContext -->
+  <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
 
-    <!--
-    <bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.MemCacheTicketRegistry">
-        <constructor-arg index="0" ref="memcachedClient" />
+  <util:list id="packagesToScan">
+    <value>org.jasig.cas.ticket</value>
+    <value>org.jasig.cas.adaptors.jdbc</value>
+    <!-- Added by symentis for JPA Service Registry, as we share the same transactionManager. -->
+    <value>org.jasig.cas.services</value>
+  </util:list>
 
-        <constructor-arg index="1" value="7200" />
+  <bean id="jpaVendorAdapter"
+        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+        p:generateDdl="true"
+        p:showSql="true"/>
 
-        <constructor-arg index="2" value="600" />
-    </bean>
+  <bean id="entityManagerFactory"
+        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+        p:dataSource-ref="dataSource"
+        p:jpaVendorAdapter-ref="jpaVendorAdapter"
+        p:packagesToScan-ref="packagesToScan">
+    <property name="jpaProperties">
+      <props>
+        <prop key="hibernate.dialect">${database.hibernate.dialect:org.hibernate.dialect.HSQLDialect}</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop> <!-- use "update" if you use remember-me long-term tickets or HSQLDB. "create-drop" does not work with HSQLDB -->
+        <prop key="hibernate.jdbc.batch_size">${database.hibernate.batchSize:1}</prop>
+      </props>
+    </property>
+  </bean>
 
-    <bean id="memcachedClient" class="net.spy.memcached.spring.MemcachedClientFactoryBean"
-        p:servers="localhost:11211"
-        p:protocol="BINARY"
-        p:locatorType="CONSISTENT"
-        p:failureMode="Redistribute"
-        p:transcoder-ref="kryoTranscoder">
-        <property name="hashAlg">
-            <util:constant static-field="net.spy.memcached.DefaultHashAlgorithm.KETAMA_HASH" />
-        </property>
-    </bean>
-    <bean id="kryoTranscoder" class="org.jasig.cas.ticket.registry.support.kryo.KryoTranscoder" init-method="initialize">
-        <constructor-arg index="0" value="8192" />
-    </bean>
+  <bean id="transactionManager"
+        class="org.springframework.orm.jpa.JpaTransactionManager"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
+
+  <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:attributes>
+      <!-- Next line added by roos. Missing in the docs. See http://stackoverflow.com/a/33663812 -->
+      <!--<tx:method name="add*" read-only="false"/>-->
+      <tx:method name="delete*" read-only="false"/>
+      <tx:method name="save*" read-only="false"/>
+      <tx:method name="update*" read-only="false"/>
+      <tx:method name="get*" read-only="true"/>
+      <tx:method name="*"/>
+    </tx:attributes>
+  </tx:advice>
+
+  <aop:config>
+    <aop:pointcut id="ticketRegistryOperations" expression="execution(* org.jasig.cas.ticket.registry.JpaTicketRegistry.*(..))"/>
+    <aop:pointcut id="ticketRegistryLockingOperations" expression="execution(* org.jasig.cas.ticket.registry.support.JpaLockingStrategy.*(..))"/>
+    <!-- Added next line for JPA Service Registry as we share same transactionManager -->
+    <aop:pointcut id="serviceRegistryOperations" expression="execution(* org.jasig.cas.services.JpaServiceRegistryDaoImpl.*(..))"/>
+    <aop:pointcut id="registeredServiceOperations" expression="execution(* org.jasig.cas.services.RegisteredServiceImpl.*(..))"/>
+
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="ticketRegistryOperations"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="ticketRegistryLockingOperations"/>
+    <!-- Added next line for JPA Service Registry as we share same transactionManager -->
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceRegistryOperations"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="registeredServiceOperations"/>
+  </aop:config>
+
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+
+  <!--Quartz -->
+  <!-- JPA TICKET REGISTRY CLEANER -->
+  <bean id="ticketRegistryCleaner" class="org.jasig.cas.ticket.registry.support.DefaultTicketRegistryCleaner"
+        c:centralAuthenticationService-ref="centralAuthenticationService"
+        c:ticketRegistry-ref="ticketRegistry"
+        p:lock-ref="cleanerLock"/>
+
+  <bean id="cleanerLock"
+        class="org.jasig.cas.ticket.registry.support.JpaLockingStrategy"
+        p:uniqueId="\${host.name}"
+        p:applicationId="cas-ticket-registry-cleaner"/>
+
+  <bean id="jobDetailTicketRegistryCleaner"
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
+        p:targetObject-ref="ticketRegistryCleaner"
+        p:targetMethod="clean"/>
+
+  <bean id="triggerJobDetailTicketRegistryCleaner"
+        class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"
+        p:jobDetail-ref="jobDetailTicketRegistryCleaner"
+        p:startDelay="20000"
+        p:repeatInterval="5000000"/>
+
+  <!--
+  <bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.MemCacheTicketRegistry">
+      <constructor-arg index="0" ref="memcachedClient" />
+
+      <constructor-arg index="1" value="7200" />
+
+      <constructor-arg index="2" value="600" />
+  </bean>
+
+  <bean id="memcachedClient" class="net.spy.memcached.spring.MemcachedClientFactoryBean"
+      p:servers="localhost:11211"
+      p:protocol="BINARY"
+      p:locatorType="CONSISTENT"
+      p:failureMode="Redistribute"
+      p:transcoder-ref="kryoTranscoder">
+      <property name="hashAlg">
+          <util:constant static-field="net.spy.memcached.DefaultHashAlgorithm.KETAMA_HASH" />
+      </property>
+  </bean>
+  <bean id="kryoTranscoder" class="org.jasig.cas.ticket.registry.support.kryo.KryoTranscoder" init-method="initialize">
+      <constructor-arg index="0" value="8192" />
+  </bean>
 -->
 
 </beans>

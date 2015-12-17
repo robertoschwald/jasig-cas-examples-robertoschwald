@@ -7,7 +7,7 @@
   <parent>
     <groupId>com.symentis</groupId>
     <artifactId>jasig-cas-examples-robertoschwald</artifactId>
-    <version>4.1.2</version>
+    <version>4.1.3-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -36,7 +36,7 @@
       <artifactId>slf4j-simple</artifactId>
     </dependency>
 
-    <!-- Our extensions -->
+    <!-- symentis extensions -->
     <dependency>
       <groupId>com.symentis</groupId>
       <artifactId>cas-server-support-directmappedattributes</artifactId>
@@ -44,6 +44,28 @@
     <dependency>
       <groupId>com.symentis</groupId>
       <artifactId>cas-server-support-webservice</artifactId>
+    </dependency>
+
+    <!-- JPA Service- / Ticket Registry dependencies -->
+    <dependency>
+      <groupId>org.jasig.cas</groupId>
+      <artifactId>cas-server-support-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
     </dependency>
 
   </dependencies>
@@ -56,7 +78,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
 
-      <!-- Generate Keystore for Jetty SSL -->
+      <!-- Generate Keystore for Jetty SSL (if not yet existing) -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>keytool-maven-plugin</artifactId>
@@ -80,6 +102,7 @@
         </configuration>
       </plugin>
 
+
       <!-- Jetty Application Server demo -->
       <plugin>
         <groupId>org.mortbay.jetty</groupId>
@@ -102,13 +125,14 @@
           <webApp>
             <contextPath>/cas</contextPath>
           </webApp>
+          <!-- Add CAS-Management Webapp (remarked for now to focus on CAS-Server JPA "AbstractRegisteredService is not mapped" error)
           <contextHandlers>
-            <!-- Add CAS-Management Webapp -->
             <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
               <war>${basedir}/../cas-management-overlay/target/cas-management-overlay.war</war>
               <contextPath>/cas-management</contextPath>
             </contextHandler>
           </contextHandlers>
+          -->
           <stopKey>stopKey</stopKey>
           <stopPort>8009</stopPort>
         </configuration>

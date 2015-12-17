@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xwss:SecurityConfiguration dumpMessages="false" xmlns:xwss="http://java.sun.com/xml/ns/xwss/config">  
-    <xwss:UsernameToken useNonce="false" digestPassword="false"/>  
-</xwss:SecurityConfiguration>  
+
+<!-- WS Client security config. Depends on the WS Producer requirements -->
+<xwss:SecurityConfiguration dumpMessages="true" xmlns:xwss="http://java.sun.com/xml/ns/xwss/config">
+  <xwss:UsernameToken useNonce="false" digestPassword="false"/>
+</xwss:SecurityConfiguration>

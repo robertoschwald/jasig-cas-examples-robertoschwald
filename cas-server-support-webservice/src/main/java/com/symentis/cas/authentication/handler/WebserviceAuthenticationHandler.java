@@ -19,9 +19,6 @@
 
 package com.symentis.cas.authentication.handler;
 
-import com.symentis.cas.ws.sample.client.ExampleWsClient;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jasig.cas.authentication.HandlerResult;
 import org.jasig.cas.authentication.PreventedException;
 import org.jasig.cas.authentication.UsernamePasswordCredential;
@@ -50,6 +47,9 @@ public class WebserviceAuthenticationHandler extends AbstractWebserviceAuthentic
 
   public final void setAttributeRepository(final DirectMappedPersonAttributeDao attributeRepository) {
     this.attributeRepository = attributeRepository;
+  }
+
+  public WebserviceAuthenticationHandler() {
   }
 
   public void afterPropertiesSet() throws Exception {

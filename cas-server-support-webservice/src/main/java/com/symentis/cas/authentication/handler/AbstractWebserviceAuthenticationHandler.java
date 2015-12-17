@@ -31,8 +31,7 @@ import javax.validation.constraints.NotNull;
  * @author Robert Oschwald
  */
 
-public abstract class AbstractWebserviceAuthenticationHandler extends
-  AbstractUsernamePasswordAuthenticationHandler {
+public abstract class AbstractWebserviceAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
 
   @NotNull
   protected WebserviceClient _webserviceClient;
