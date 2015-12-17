@@ -13,15 +13,13 @@
     This is the symentis SOAP Webservice Authenticator Client context configuration.
   </description>
 
-  <!--<util:list id="packagesToScan">-->
-    <!--<value>com.symentis.cas.ws.sample.client</value>-->
-  <!--</util:list>-->
-
-  <!-- **************************************-->
-  <!-- SOAP Webservice  Client -->
-  <!-- WARNING! NORMALLY, YOU SHOULD USE SSL defaultUri!!
-       We just don't use it due to keystore cert validation problems with jetty-maven-plugin and httpClient with SSL in this demo project -->
-  <!-- **************************************-->
+  <!-- ****************************************************************************
+       SOAP Webservice Client pointing to your backend webservice producer for
+       authentication.
+       WARNING! YOU SHOULD USE SSL defaultUri or use some other sort of encryption!
+       We just don't use it here due to keystore cert validation issues with
+       jetty-maven-plugin and HttpClient in this demo project
+       **************************************************************************** -->
 
   <bean id="authWebserviceClient" class="com.symentis.cas.ws.sample.client.ExampleWsClient"
         p:marshaller-ref="webserviceMarshaller"

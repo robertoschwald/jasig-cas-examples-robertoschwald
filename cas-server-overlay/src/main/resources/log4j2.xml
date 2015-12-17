@@ -67,9 +67,9 @@
 
     <Logger name="com.symentis" level="trace" />
 
-    <Root level="debug">
+    <Root level="info">
       <AppenderRef ref="console"/>
-      <AppenderRef ref="file"/>
+      <!--<AppenderRef ref="file"/>-->
     </Root>
   </Loggers>
 </Configuration>
