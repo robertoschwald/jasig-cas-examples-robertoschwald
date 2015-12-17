@@ -48,7 +48,7 @@
   </Appenders>
   <Loggers>
     <Logger name="org.jasig" level="debug" additivity="false">
-      <AppenderRef ref="file"/>
+      <!--<AppenderRef ref="file"/>-->
     </Logger>
     <Logger name="org.springframework" level="warn"/>
     <Logger name="org.springframework.webflow" level="warn"/>
@@ -67,9 +67,8 @@
 
     <Logger name="com.symentis" level="trace" />
 
-    <Root level="debug">
+    <Root level="info">
       <AppenderRef ref="console"/>
-      <AppenderRef ref="file"/>
     </Root>
   </Loggers>
 </Configuration>

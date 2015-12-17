@@ -1,7 +1,7 @@
-JASIG CAS EXAMPLE EXTENSIONS
-============================
+JASIG CAS EXAMPLE OVERLAY
+=========================
 
-Example APEREO CAS WAR Overlay project with various CAS extension modules 
+Example APEREO CAS WAR Overlay project with no custom extensions.
 
 **Using JPA for Ticket- and Service Registry (HSQLDB)**
 
@@ -29,55 +29,6 @@ This demo application uses JPA for the Service- and Ticket Registries.
 Service-Registry config is done in cas-server-overlay and in cas-management-overlay, as both share the same db tables for service registry entries.
 
 This example uses HSQLDB. Real implementations use MySQL, PostgreSQL, Oracle, MSSQL or any other Hibernate supported database backend.
-
-Extensions
-----------
-This project additionally holds the following CAS Server extensions
-
-WebserviceAuthenticationHandler
------------------------------
-Module cas-server-support-webservice is a sample WebserviceAuthenticationHandler implementation you can use to authenticate
-against a Webservice based backend. The WebserviceAuthenticationHandler is webservice technology agnostic.
-
-Simply wire in your WebserviceClient implementation (e.g. SOAP or REST client).
-
-Provided is a Spring-WS based Webservice client which can be configured to run with- or without a WSSE header.
-
-DirectMappedPersonAttributeDao
-----------------------------
-By default, the PersonAttributeDao implementations of the Jasig Person-Directory library need an extra request
-after sucessful authentication to pull user attributes to provide them to CAS Client applications.
-
-The DirectMappedPersonAttributeDao is a short-term caching attributeRepository, which can be filled with user attributes
-from beans directly (e.g. by AuthenticationHandlers).
-
-This example CAS Server application wires the DirectMappedPersonAttributeDao into the WebserviceAuthenticationHandler.
-
-On successful authentication, the received principal attributes are stored in the DirectMappedPersonAttributeDao.
-On first serviceValidate state, the attributes for the principal are removed from the short-term cache.
-Stale entries (e.g. no serviceValidate state happened) are removed after a TTL (default 1 minute).
-See the provided deployerConfigContext.xml file for an example configuration of this attributeRepository.
-
-Example serviceValidate response:
-
-```xml
-<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
-    <cas:authenticationSuccess>
-        <cas:user>admin</cas:user>
-        <cas:attributes>
-            <cas:isRemembered></cas:isRemembered>
-            <cas:isFromNewLogin>false</cas:isFromNewLogin>
-                <cas:USER_ATTRIB_CACHE_EXPIRY_TIME>1397730496188</cas:USER_ATTRIB_CACHE_EXPIRY_TIME>
-                <cas:lastname>TestLastName</cas:lastname>
-                <cas:netid>admin</cas:netid>
-                <cas:firstname>TestFirstName</cas:firstname>
-        </cas:attributes>
-    </cas:authenticationSuccess>
-</cas:serviceResponse>
-```
-
-To prevent the USER_ATTRIB_CACHE_EXPIRY_TIME attribute to be returned, do not select the "Ignore Attribute Management via this Tool" checkbox in the service management application.
-Instead, select the attributes you want to have returned to services on a per-service base.
 
 Project setup
 -------------

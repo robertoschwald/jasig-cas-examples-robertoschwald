@@ -180,8 +180,6 @@
   </build>
 
   <modules>
-    <module>cas-server-support-directmappedattributes</module>
-    
     <module>cas-server-overlay</module>
     <module>cas-management-overlay</module>
   </modules>
