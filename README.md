@@ -5,7 +5,7 @@ Example APEREO CAS WAR Overlay project with no custom extensions.
 
 **Using JPA for Ticket- and Service Registry (HSQLDB)**
 
-Example extensions to the standard JASIG CAS SSO Server by symentis GmbH, Robert Oschwald.
+You can use this vanilla overlay project as a starting point for your own CAS Server implementation.
 
 CAS-Server Version
 ------------------
@@ -38,25 +38,11 @@ After you checked out the code from the repository, it is mandatory that you per
 mvn install
 ```
 
-This creates the JaxB classes for the sample SOAP webservice in target/src and the artifacts needed.
-
-Sample application
-------------------
-The CAS application maven overlay configuration in the cas-server-overlay module of this project uses
-
- * Spring-WS based WebServiceClient to authenticate against a provided test Spring-WS WebserviceEndpoint (which btw. accepts every username / password given).
-   The WebserviceClient is configured to not use a WSSE header.
- * Configures the DirectMappedPersonAttributeDao to provide CAS Client applications user attributes received by the WebserviceClient.
-
 Configuration
 -------------
  * cas-server-overlay/src/main/webapp/WEB-INF/deployerConfigContext.xml
- * cas-server-overlay/src/main/webapp/WEB-INF/spring-ws-config.xml
  * cas-server-overlay/src/main/webapp/WEB-INF/spring-configuration
- * cas-server-overlay/src/main/webapp/WEB-INF/webservice-configuration
- * cas-server-overlay/src/main/webapp/WEB-INF/web.xml
-   This is the original CAS Server 4.1.3-SNAPSHOT web.xml file plus Spring-WS MessageDispatcherServlet config at the bottom, added for the test Spring-WS ExampleAuthenticationEndpoint.
- * cas-server-overlay/src/main/webapp/view/jsp/protocol/casServiceValidationSuccess.jsp (adds the cas attributes to the CAS 2.0 service response as a custom extension (by default, attributes are only supported at the CAS 3.0 Spec default URI /p3/serviceValidate).
+ * cas-server-overlay/src/main/webapp/view/jsp/protocol/casServiceValidationSuccess.jsp (adds the cas attributes to the CAS 2.0 service response as a custom extension. Standard CAS-Server 4.x supports attribute release only at the CAS 3.0 Spec default URI /p3/serviceValidate).
  * cas-management-overlay/src/main/resources/user-details.properties (configure usernames allowed to access the management webapp)
 
 
@@ -91,12 +77,11 @@ and build a securely configured CAS server bundle to be deployed into that app s
 
 Keystore files
 --------------
-Apereo CAS and the Webservice Client rely on HTTPS. Therefore, the maven build creates a SSL Certificate and
+Apereo CAS relies on HTTPS. Therefore, the maven build creates a SSL Certificate if not existend and
 stores it in a Java keystore file used by the embedded Jetty server, so the underlying Java implementation trusts this
-self-signed certificate (The WebserviceClient otherwise would not accept the connection)
+self-signed certificate.
 
  * The JKS and PEM files are available in cas-server-overlay/target/jetty-ssl.keystore. (Useful for testing external CAS clients as well)
- * CAS server logs are in cas-server-overlay/target/
 
 CAS URLs
 --------
