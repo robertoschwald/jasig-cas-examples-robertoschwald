@@ -94,14 +94,13 @@
           <webApp>
             <contextPath>/cas</contextPath>
           </webApp>
-          <!-- Add CAS-Management Webapp (remarked for now to focus on CAS-Server JPA "AbstractRegisteredService is not mapped" error)
+          <!-- Add CAS-Management Webapp -->
           <contextHandlers>
             <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
               <war>${basedir}/../cas-management-overlay/target/cas-management-overlay.war</war>
               <contextPath>/cas-management</contextPath>
             </contextHandler>
           </contextHandlers>
-          -->
           <stopKey>stopKey</stopKey>
           <stopPort>8009</stopPort>
         </configuration>

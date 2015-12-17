@@ -67,7 +67,17 @@ Then access https://localhost:8443/cas/ in your favorite browser.
 
 The Services Management webapp can be accessed at
 
- http://localhost:8080/cas-management. (log in as testadmin:<anypassword>)
+ http://localhost:8080/cas-management. (log in as casadmin:VerySecure)
+
+Authentication Users
+--------------------
+The following users are configured in deployerConfigContext.xml for authentication:
+
+Username | Password    | Remark
+-------- | --------    | ------
+casuser  | Mellon      | Normal user with NO access to /cas-management webapplication
+casadmin | VerySecure  | Admin user with access to /cas-management webapplication
+
 
 Warning
 -------
