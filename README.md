@@ -58,6 +58,8 @@ On first serviceValidate state, the attributes for the principal are removed fro
 Stale entries (e.g. no serviceValidate state happened) are removed after a TTL (default 1 minute).
 See the provided deployerConfigContext.xml file for an example configuration of this attributeRepository.
 
+Note: The current version of the DirectMappedPersonAttributeDao is netId case-sensitive. So either ensure the netId gets converted to lowercase (e.g. in UsernamePasswordCredentials) or convert the netId in the DirectMappedPersonAttributeDao methods to lowercase, as the netId is used as the key in the attribute cache map.
+
 Example serviceValidate response:
 
 ```xml
