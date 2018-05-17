@@ -163,7 +163,7 @@ More Information
 
 Deploy CAS 5.x Howto
 --------------------
-https://dacurry-tns.github.io/deploying-apereo-cas/high-avail_distrib-metadata_overview.html
+https://dacurry-tns.github.io/deploying-apereo-cas/introduction_overview.html
 
 LICENSE
 -------
