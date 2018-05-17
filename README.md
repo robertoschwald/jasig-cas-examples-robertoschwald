@@ -161,6 +161,10 @@ More Information
  * [APEREO CAS on GitHub](https://github.com/jasig/cas)
 
 
+Deploy CAS 5.x Howto
+--------------------
+https://dacurry-tns.github.io/deploying-apereo-cas/high-avail_distrib-metadata_overview.html
+
 LICENSE
 -------
 Copyright 2015 symentis GmbH
